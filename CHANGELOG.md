@@ -1,6 +1,40 @@
 # 更新日志
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/) 与 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
+## [1.0.3] - 2026-10-27
+
+### 修复
+
+- **开机自启在版本升级后失效**：注册表 `Run\KeyTrace` 里存的是旧 exe 的绝对路径，
+  升级/移动目录后该文件已不存在，Windows 开机时静默跳过，而设置页仍显示"已开启"。
+  现在：
+  - 启动时校验自启项是否指向当前 exe、目标文件是否存在，不一致即自动改写为当前程序
+    （运行在临时目录或 dotnet 调试时不改写）；
+  - 开启自启时同时清除 `StartupApproved` 里的禁用标记，避免"任务管理器里被禁用过就永远不启动"；
+  - 设置页在开关下方显示实际指向的路径，失效时用警告色提示。
+- 新增 16 个自启相关单元测试（注册表读写使用内存替身，不污染真实系统）。
+
+### 优化
+
+- 托盘隐藏时把界面刷新从 2 秒放宽到约 6 秒，并跳过页面级刷新，减少后台空转。
+- "累计"卡片改为每 10 秒刷新一次（原来是每 2 秒一次跨表 `SUM`）。
+- CSV 导出移出 UI 线程，导出期间按钮显示"导出中…"并自动禁用，大库不再卡界面。
+- 托盘 tooltip 内容未变化时不再写入，减少无意义的 Shell IPC。
+- Release 构建开启 `TreatWarningsAsErrors`，把警告挡在发布之外。
+
+## [1.0.2] - 2026-10-27
+
+### 变更
+
+- **SQLite 改为使用 Windows 自带的 `winsqlite3.dll`**（`Microsoft.Data.Sqlite.Core` +
+  `SQLitePCLRaw.bundle_winsqlite3`），程序自身不再携带 `e_sqlite3.dll` 等原生库。
+  仍可通过 `-p:KeyTraceBundledSqlite=true` 切回随包携带 SQLite 的模式。
+- 移除 `IncludeAllContentForSelfExtract`：单文件启动时只解包 WPF 必需的 5 个原生 DLL
+  （约 8 MB），不再把 237 个托管文件一起解包。
+- 新增「框架依赖」发布形态：`./scripts/publish.ps1 -SelfContained:$false`，
+  产物约 2.7 MB，**完全不产生任何临时解包**，只需目标机安装 .NET 8 Desktop Runtime。
+- `docs/BUILD.md` 增加「单文件与原生库」章节，说明两个解包相关属性的区别与三种解法。
+
 
 ## [1.0.1] - 2026-10-27
 
