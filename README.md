@@ -86,7 +86,7 @@ KeyTrace 是一个常驻在系统托盘的 Windows 小工具：它统计你**按
 
 ### 方式一：直接用发布版
 
-1. 到 [Releases](../../releases) 下载 `KeyTrace.exe`（win-x64，单文件，约 70 MB）。
+1. 到 [Releases](../../releases) 下载 `KeyTrace.exe`（win-x64，单文件，约 70 MB）。（作者是区，用不了要用脚本）
 2. 双击运行。首次启动时 Windows SmartScreen 可能提示「未知发布者」（未做代码签名），选择「更多信息 → 仍要运行」。
 3. 程序默认最小化到系统托盘，双击托盘图标打开主窗口。
 
