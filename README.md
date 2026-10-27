@@ -7,7 +7,7 @@
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4?logo=windows&logoColor=white)](#系统要求)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-90%20passing-brightgreen.svg)](#测试)
+[![Tests](https://img.shields.io/badge/tests-106%20passing-brightgreen.svg)](#测试)
 
 ![今日概览](docs/screenshots/dashboard.png)
 
@@ -86,7 +86,7 @@ KeyTrace 是一个常驻在系统托盘的 Windows 小工具：它统计你**按
 
 ### 方式一：直接用发布版
 
-1. 到 [Releases](../../releases) 下载 `KeyTrace.exe`（win-x64，单文件，约 70 MB）。（作者是区，用不了要用脚本）
+1. 到 [Releases](../../releases) 下载 `KeyTrace.exe`（win-x64，单文件，约 70 MB）。（作者是区，有可能用不了，记得看文档）
 2. 双击运行。首次启动时 Windows SmartScreen 可能提示「未知发布者」（未做代码签名），选择「更多信息 → 仍要运行」。
 3. 程序默认最小化到系统托盘，双击托盘图标打开主窗口。
 
@@ -118,12 +118,12 @@ dotnet test
 | --- | --- | --- |
 | 语言 | C# 12 / .NET 8 | WPF + `net8.0-windows` |
 | 全局钩子 | Win32 `SetWindowsHookEx`（P/Invoke） | 独立消息泵线程，只观察不拦截 |
-| 本地存储 | Microsoft.Data.Sqlite | 纯本地 SQLite，WAL 模式 |
+| 本地存储 | Microsoft.Data.Sqlite.Core + winsqlite3 | 复用 Windows 自带 SQLite，单文件不携带原生库；WAL 模式 |
 | UI | WPF + 手写 MVVM | 无第三方 MVVM / 图表依赖 |
 | 图表 | 自定义 `FrameworkElement` + `DrawingContext` | 折线、柱状、环形、热图、月历 |
 | 系统托盘 | H.NotifyIcon.Wpf | 托盘菜单 + 实时 tooltip |
 | 开机自启 | `HKCU\...\Run` | 无需管理员权限 |
-| 部署 | Self-contained Single File | 单个 exe，目标机免装运行时 |
+| 部署 | Single File | 自包含 63 MB（免装运行时）或框架依赖 2.7 MB（零解包） |
 
 ### 为什么不用现成的图表库？
 
@@ -198,7 +198,7 @@ KeyTrace/
 │       ├── Views/                  # 五个页面视图
 │       └── Themes/                 # 深色主题与控件模板
 ├── tests/
-│   └── KeyTrace.Core.Tests/        # 90 个单元测试
+│   └── KeyTrace.Core.Tests/        # 106 个单元测试
 ├── docs/                           # 架构、隐私、构建说明
 ├── scripts/                        # 发布、图标生成、截图脚本
 └── .github/                        # CI 与 Issue/PR 模板
@@ -230,7 +230,7 @@ KeyTrace/
 
 ```powershell
 dotnet build                     # 构建全部项目
-dotnet test                      # 90 个单元测试
+dotnet test                      # 106 个单元测试
 dotnet run --project src/KeyTrace.App/KeyTrace.App.csproj
 ./scripts/publish.ps1            # 单文件发布
 python scripts/make_icon.py      # 重新生成多尺寸图标（需要 Pillow）
@@ -245,7 +245,7 @@ dotnet run --project src/KeyTrace.App/KeyTrace.App.csproj
 
 ### 测试
 
-Core 层（聚合、校准、隐私、仓储、成就、CSV）有 90 个 xUnit 测试，全部在 CI 中运行：
+Core 层（聚合、校准、隐私、仓储、成就、CSV）有 106 个 xUnit 测试，全部在 CI 中运行：
 
 ```powershell
 dotnet test tests/KeyTrace.Core.Tests/KeyTrace.Core.Tests.csproj
