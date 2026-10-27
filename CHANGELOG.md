@@ -1,6 +1,15 @@
 # 更新日志
 
 本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/) 与 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 格式。
+## [1.0.4] - 2026-10-27
+
+### 修复
+
+- **托盘右键菜单白底白字**：`ContextMenu` / `MenuItem` / `Separator` 之前沿用 WPF 默认浅色模板，
+  而全局 `TextBlock` 样式把文字刷成了浅色，导致菜单几乎看不清。
+  现在补上了深色模板：`#171A23` 底、1px 描边、9px 圆角、悬停高亮，与主界面一致；
+  输入框右键菜单（剪切/复制/粘贴）也一并生效。
+
 ## [1.0.3] - 2026-10-27
 
 ### 修复
