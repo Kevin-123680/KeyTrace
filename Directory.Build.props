@@ -14,9 +14,9 @@
     <Company>KeyTrace</Company>
     <Product>键迹 KeyTrace</Product>
     <Copyright>Copyright (c) 2026 KeyTrace contributors</Copyright>
-    <Version>1.0.3</Version>
-    <AssemblyVersion>1.0.3.0</AssemblyVersion>
-    <FileVersion>1.0.3.0</FileVersion>
+    <Version>1.0.4</Version>
+    <AssemblyVersion>1.0.4.0</AssemblyVersion>
+    <FileVersion>1.0.4.0</FileVersion>
     <TieredPGO>true</TieredPGO>
     <!-- Release 下把警告当错误，防止"能过就行"的代码混进发布 -->
     <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
