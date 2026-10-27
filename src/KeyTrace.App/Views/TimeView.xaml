@@ -1,0 +1,177 @@
+<UserControl x:Class="KeyTrace.App.Views.TimeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="960"
+             d:DesignHeight="780">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,24,28,28">
+
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource PageTitleStyle}" />
+                    <TextBlock Text="看看自己什么时候最活跃" Style="{StaticResource PageSubtitleStyle}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Style="{StaticResource InsetCardStyle}" Padding="14,8" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="连续使用" Style="{StaticResource MutedStyle}" FontSize="11" />
+                            <TextBlock Text="{Binding StreakText}" FontSize="17" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource InsetCardStyle}" Padding="14,8" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="总活跃天数" Style="{StaticResource MutedStyle}" FontSize="11" />
+                            <TextBlock Text="{Binding ActiveDaysText}" FontSize="17" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource InsetCardStyle}" Padding="14,8" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="近 30 天日均" Style="{StaticResource MutedStyle}" FontSize="11" />
+                            <TextBlock Text="{Binding AverageText}" FontSize="17" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource InsetCardStyle}" Padding="14,8">
+                        <StackPanel>
+                            <TextBlock Text="深夜占比" Style="{StaticResource MutedStyle}" FontSize="11" />
+                            <TextBlock Text="{Binding NightText}" FontSize="17" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <!-- 一周 24 小时热力网格 -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Text="一周 24 小时分布" Style="{StaticResource SectionTitleStyle}" />
+                        <TextBlock Text="{Binding WeekRangeText}" Style="{StaticResource MutedStyle}"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <Grid Margin="0,14,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18" />
+                            <RowDefinition Height="150" />
+                        </Grid.RowDefinitions>
+
+                        <ItemsControl Grid.Column="1" ItemsSource="{Binding HourLabels}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="24" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" Style="{StaticResource MutedStyle}" FontSize="9.5"
+                                               HorizontalAlignment="Center" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding WeekHeatCells}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="24" Rows="7" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{Binding Background}" CornerRadius="2" Margin="1.5"
+                                            ToolTip="{Binding Tooltip}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <ItemsControl Grid.Row="1" ItemsSource="{Binding WeekdayHeaders}" VerticalAlignment="Stretch">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="7" Columns="1" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" Style="{StaticResource MutedStyle}" FontSize="10.5"
+                                               VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 月历热力图 -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,16,0,0">
+                <StackPanel>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="‹" Style="{StaticResource SubtleButton}" Command="{Binding PreviousMonthCommand}"
+                                    Padding="12,4" FontSize="15" />
+                            <TextBlock Text="{Binding MonthTitle}" Style="{StaticResource SectionTitleStyle}"
+                                       VerticalAlignment="Center" Margin="12,0,12,0" />
+                            <Button Content="›" Style="{StaticResource SubtleButton}" Command="{Binding NextMonthCommand}"
+                                    Padding="12,4" FontSize="15" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding MonthSummary}" Style="{StaticResource MutedStyle}"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <ItemsControl ItemsSource="{Binding WeekdayHeaders}" Margin="0,14,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="7" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Style="{StaticResource MutedStyle}" FontSize="10.5"
+                                           HorizontalAlignment="Center" Margin="0,0,0,6" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <ItemsControl ItemsSource="{Binding CalendarCells}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="7" Rows="6" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Height="54" Margin="2" CornerRadius="7" Background="{Binding Background}"
+                                        ToolTip="{Binding Tooltip}">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Setter Property="BorderThickness" Value="0" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsToday}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+                                                    <Setter Property="BorderThickness" Value="1.5" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding DayText}" Foreground="{Binding Foreground}" FontSize="11.5"
+                                               HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,4,0,0" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

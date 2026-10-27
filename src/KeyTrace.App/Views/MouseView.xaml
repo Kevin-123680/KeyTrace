@@ -1,0 +1,166 @@
+<UserControl x:Class="KeyTrace.App.Views.MouseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:KeyTrace.App.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="960"
+             d:DesignHeight="700">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="28,24,28,28">
+
+            <Grid Margin="0,0,0,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource PageTitleStyle}" />
+                    <TextBlock Text="{Binding CalibrationText}" Style="{StaticResource PageSubtitleStyle}" />
+                </StackPanel>
+                <Button Grid.Column="1" Content="去校准 DPI" Style="{StaticResource GhostButton}"
+                        Command="{Binding OpenCalibrationCommand}" VerticalAlignment="Center" />
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="360" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,16,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="190" />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="近 7 天鼠标里程" Style="{StaticResource SectionTitleStyle}" />
+                            <TextBlock Grid.Column="1" Text="{Binding WeekRangeText}" Style="{StaticResource MutedStyle}"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                        <controls:LineChart Grid.Row="1" Margin="0,14,0,0"
+                                            Values="{Binding WeekSeries}"
+                                            Labels="{Binding WeekLabels}"
+                                            EmptyText="还没有鼠标移动数据" />
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="今日点击构成" Style="{StaticResource SectionTitleStyle}" />
+                        <Grid Height="180" Margin="0,8,0,0">
+                            <controls:DonutChart Segments="{Binding Segments}"
+                                                 CenterText="{Binding TodayMetersText}"
+                                                 CenterCaption="今日移动"
+                                                 Thickness="16" />
+                        </Grid>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="左键" Style="{StaticResource MutedStyle}" FontSize="11" HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding LeftText}" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="右键" Style="{StaticResource MutedStyle}" FontSize="11" HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding RightText}" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="中键" Style="{StaticResource MutedStyle}" FontSize="11" HorizontalAlignment="Center" />
+                                <TextBlock Text="{Binding MiddleText}" FontSize="15" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Margin="0,16,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,14,0">
+                    <StackPanel>
+                        <TextBlock Text="今日移动" Style="{StaticResource LabelStyle}" />
+                        <TextBlock Text="{Binding TodayMetersText}" Style="{StaticResource StatValueStyle}" />
+                        <TextBlock Text="{Binding PixelsText}" Style="{StaticResource MutedStyle}" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="0,0,14,0">
+                    <StackPanel>
+                        <TextBlock Text="本周累计" Style="{StaticResource LabelStyle}" />
+                        <TextBlock Text="{Binding WeekMetersText}" Style="{StaticResource StatValueStyle}" />
+                        <TextBlock Text="近 7 天" Style="{StaticResource MutedStyle}" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}" Margin="0,0,14,0">
+                    <StackPanel>
+                        <TextBlock Text="近 30 天" Style="{StaticResource LabelStyle}" />
+                        <TextBlock Text="{Binding MonthMetersText}" Style="{StaticResource StatValueStyle}" />
+                        <TextBlock Text="{Binding AverageText, StringFormat='日均 {0}'}" Style="{StaticResource MutedStyle}" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource CardStyle}" Margin="0,0,14,0">
+                    <StackPanel>
+                        <TextBlock Text="滚轮" Style="{StaticResource LabelStyle}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ScrollText}" Style="{StaticResource StatValueStyle}" />
+                            <TextBlock Text="格" Style="{StaticResource StatUnitStyle}" />
+                        </StackPanel>
+                        <TextBlock Text="今日累计" Style="{StaticResource MutedStyle}" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource CardStyle}" Margin="0,16,0,0">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Text="点击热区（近 30 天）" Style="{StaticResource SectionTitleStyle}" />
+                        <TextBlock Text="按屏幕 5% × 10% 网格归一化，不记录精确坐标" Style="{StaticResource MutedStyle}"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <ItemsControl ItemsSource="{Binding ZoneCells}" Height="220" Margin="0,14,0,0"
+                                  Visibility="{Binding HasClickZones, Converter={StaticResource BoolToVisibility}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="20" Rows="10" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Background}" CornerRadius="3" Margin="1.5"
+                                        ToolTip="{Binding Tooltip}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="{Binding ZoneEmptyText}" Margin="0,14,0,0">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MutedStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasClickZones}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
